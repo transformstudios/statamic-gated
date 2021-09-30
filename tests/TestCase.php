@@ -64,6 +64,7 @@ class TestCase extends OrchestraTestCase
 
         // Assume the pro edition within tests
         $app['config']->set('statamic.editions.pro', true);
+        $app['config']->set('gated.enabled', true);
 
         Statamic::pushWebRoutes(function () {
             Route::get('/dummy-test-route', function () {
