@@ -1,0 +1,37 @@
+{
+    "name": "transformstudios/gated",
+    "autoload": {
+        "psr-4": {
+            "TransformStudios\\Gated\\": "src"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "TransformStudios\\Gated\\Tests\\": "tests"
+        }
+    },
+    "require": {
+        "php": "^8.0",
+        "laravel/framework": "^8.53",
+        "statamic/cms": "^3.2"
+    },
+    "require-dev": {
+        "mockery/mockery": "^1.3.1",
+        "nunomaduro/collision": "^5.0",
+        "phpunit/phpunit": "^9.0",
+        "orchestra/testbench": "^6.0",
+        "spatie/laravel-ray": "^1.24",
+        "jasonmccreary/laravel-test-assertions": "^2.0"
+    },
+    "extra": {
+        "statamic": {
+            "name": "Gated",
+            "description": "Gated addon"
+        },
+        "laravel": {
+            "providers": [
+                "TransformStudios\\Gated\\ServiceProvider"
+            ]
+        }
+    }
+}
