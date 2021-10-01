@@ -4,14 +4,12 @@ namespace TransformStudios\Gated\Tags;
 
 use Statamic\Tags\Tags;
 
-class ShowTeaser extends Tags
+class Gate extends Tags
 {
     /**
-     * The {{ now_or_param }} tag.
-     *
-     * @return string|array
+     * @return bool
      */
-    public function index()
+    public function authorized()
     {
         if (! $this->context->value('is_gated')) {
             return false;

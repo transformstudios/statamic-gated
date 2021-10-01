@@ -5,7 +5,7 @@ namespace TransformStudios\Gated;
 use Statamic\Providers\AddonServiceProvider;
 use TransformStudios\Gated\Http\Middleware\AddRolesToQueryString;
 use TransformStudios\Gated\Modifiers\Intersect;
-use TransformStudios\Gated\Tags\ShowTeaser;
+use TransformStudios\Gated\Tags\Gate;
 
 class ServiceProvider extends AddonServiceProvider
 {
@@ -20,6 +20,6 @@ class ServiceProvider extends AddonServiceProvider
     ];
 
     protected $tags = [
-        ShowTeaser::class,
+        Gate::class,
     ];
 }
