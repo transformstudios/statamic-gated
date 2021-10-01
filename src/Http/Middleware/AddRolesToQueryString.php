@@ -3,7 +3,6 @@
 namespace TransformStudios\Gated\Http\Middleware;
 
 use Closure;
-use Illuminate\Support\Facades\Route;
 use Statamic\Support\Arr;
 
 class AddRolesToQueryString
@@ -48,7 +47,7 @@ class AddRolesToQueryString
         // if there are roles on the qs and the user has roles
         if ($qsRoles && $userRoles) {
             // if the roles are the same, don't do anything
-            if (collect($qsRoles)->diff($userRoles)->isEmpty()) {
+            if (array_diff($qsRoles, $userRoles) == array_diff($userRoles, $qsRoles)) {
                 return $next($request);
             }
 
