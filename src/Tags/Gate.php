@@ -12,7 +12,7 @@ class Gate extends Tags
     public function authorized()
     {
         if (! $this->context->value('is_gated')) {
-            return false;
+            return true;
         }
 
         return ! empty(array_intersect(
