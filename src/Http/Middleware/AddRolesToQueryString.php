@@ -3,6 +3,7 @@
 namespace TransformStudios\Gated\Http\Middleware;
 
 use Closure;
+use Illuminate\Support\Facades\Route;
 use Statamic\Support\Arr;
 
 class AddRolesToQueryString
@@ -19,9 +20,11 @@ class AddRolesToQueryString
         if (! config('gated.enabled')) {
             return $next($request);
         }
-        // if it doesn't have roles, redirect to add roles to query string
-        // @todo should check for get as well, don't want to add to non-page routes, like the "review" url
-        // can we check the name of the route to see if it starts w/ `statamic`?
+
+        if (Route::currentRouteName() !== 'statamic.site') {
+            return $next($request);
+        }
+
         $qsRoles = $request->query('roles');
 
         /** @var \Statamic\Auth\User */
