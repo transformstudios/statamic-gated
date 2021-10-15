@@ -2,7 +2,6 @@
 
 namespace TransformStudios\Gated\Http\Middleware;
 
-use App\User as Model;
 use Closure;
 use Illuminate\Support\Facades\Route;
 use Statamic\Support\Arr;
@@ -29,9 +28,7 @@ class AddRolesToQueryString
         $qsRoles = $request->query('roles');
 
         /** @var \Statamic\Auth\User */
-        $user = $user = $request->user() instanceof Model
-            ? \Statamic\Facades\User::fromUser($request->user())
-            : $request->user();
+        $user = \Statamic\Facades\User::fromUser($request->user());
 
         $userRoles = $user?->roles()->keys()->all();
 
