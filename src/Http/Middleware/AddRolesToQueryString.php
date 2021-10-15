@@ -4,6 +4,7 @@ namespace TransformStudios\Gated\Http\Middleware;
 
 use Closure;
 use Illuminate\Support\Facades\Route;
+use Statamic\Facades\User as UserFacade;
 use Statamic\Support\Arr;
 
 class AddRolesToQueryString
@@ -27,44 +28,32 @@ class AddRolesToQueryString
 
         $qsRoles = $request->query('roles');
 
-        // not logged, move on
         if (! $user = $request->user()) {
             // if roles on qs redirect w/o roles
-            if ($qsRoles) {
-                return redirect($request->fullUrlWithoutQuery('roles'));
-            }
+            return $qsRoles ? redirect($request->fullUrlWithoutQuery('roles')) : $next($request);
+        }
 
+        /** @var \Statamic\Auth\User */
+        $user = UserFacade::fromUser($user);
+
+        if (! $userRoles = $user->roles()->keys()->all()) {
             return $next($request);
         }
 
-        /* @var \Statamic\Auth\User */
-        $user = \Statamic\Facades\User::fromUser($request->user());
-
-        $userRoles = $user?->roles()->keys()->all();
-
-        // not logged in, but there are roles, likely someone shared this link
-        if (! $user && $qsRoles) {
-            return redirect($request->fullUrlWithoutQuery('roles'));
-        }
-
-        // if no roles on qs and the user has roles, redirect w/ roles
-        if (! $qsRoles && $userRoles) {
+        if (! $qsRoles) {
             return redirect($request->fullUrlWithQuery(['roles' => $userRoles]));
         }
 
-        // if there are roles on the qs and the user has roles
-        if ($qsRoles && $userRoles) {
-            // if the roles are the same, don't do anything
-            if (array_diff($qsRoles, $userRoles) == array_diff($userRoles, $qsRoles)) {
-                return $next($request);
-            }
-
-            // if the roles are different, remove existing roles and put user ones back on
-            return redirect($request->url().'?'.Arr::query(array_merge(
-                Arr::except($request->query(), 'roles'),
-                ['roles' => $userRoles]
-            )));
+        // if the roles are the same, don't do anything
+        if (array_diff($qsRoles, $userRoles) == array_diff($userRoles, $qsRoles)) {
+            return $next($request);
         }
+
+        // if the roles are different, remove existing roles and put user ones back on
+        return redirect($request->url().'?'.Arr::query(array_merge(
+            Arr::except($request->query(), 'roles'),
+            ['roles' => $userRoles]
+        )));
 
         return $next($request);
     }
