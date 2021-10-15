@@ -25,9 +25,14 @@ class AddRolesToQueryString
             return $next($request);
         }
 
+        // not logged, move on
+        if (! $user = $request->user()) {
+            return $next($request);
+        }
+
         $qsRoles = $request->query('roles');
 
-        /** @var \Statamic\Auth\User */
+        /* @var \Statamic\Auth\User */
         $user = \Statamic\Facades\User::fromUser($request->user());
 
         $userRoles = $user?->roles()->keys()->all();
@@ -35,11 +40,6 @@ class AddRolesToQueryString
         // not logged in, but there are roles, likely someone shared this link
         if (! $user && $qsRoles) {
             return redirect($request->fullUrlWithoutQuery('roles'));
-        }
-
-        // not logged, move on
-        if (! $user) {
-            return $next($request);
         }
 
         // if no roles on qs and the user has roles, redirect w/ roles
