@@ -2,9 +2,10 @@
 
 namespace TransformStudios\Gated\Tests;
 
-use Illuminate\Support\Facades\Route;
 use Orchestra\Testbench\TestCase as OrchestraTestCase;
 use Statamic\Extend\Manifest;
+use Statamic\Facades\Collection;
+use Statamic\Facades\Entry;
 use Statamic\Providers\StatamicServiceProvider;
 use Statamic\Statamic;
 use TransformStudios\Gated\ServiceProvider;
@@ -66,10 +67,9 @@ class TestCase extends OrchestraTestCase
         $app['config']->set('statamic.editions.pro', true);
         $app['config']->set('gated.enabled', true);
 
-        Statamic::pushWebRoutes(function () {
-            Route::get('/dummy-test-route', function () {
-                return 'nice';
-            })->name('dummy.route');
+        Statamic::booted(function () {
+            Collection::make('pages')->routes('/{slug}')->save();
+            Entry::make()->slug('dummy-route')->collection('pages')->save();
         });
     }
 }
