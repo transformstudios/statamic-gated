@@ -12,10 +12,6 @@ class AddRolesToQueryString
 {
     public function handle(Request $request, Closure $next)
     {
-        if (! config('gated.enabled')) {
-            return $next($request);
-        }
-
         if (Route::currentRouteName() !== 'statamic.site') {
             return $next($request);
         }
