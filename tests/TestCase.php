@@ -16,6 +16,8 @@ class TestCase extends OrchestraTestCase
 
     protected function setUp(): void
     {
+        $this->preventSavingStacheItemsToDisk();
+
         parent::setUp();
     }
 
@@ -57,7 +59,7 @@ class TestCase extends OrchestraTestCase
         $configs = ['assets', 'cp', 'forms', 'routes', 'static_caching', 'sites', 'stache', 'system', 'users'];
 
         foreach ($configs as $config) {
-            $app['config']->set("statamic.$config", require __DIR__ . "/../vendor/statamic/cms/config/{$config}.php");
+            $app['config']->set("statamic.$config", require __DIR__."/../vendor/statamic/cms/config/{$config}.php");
         }
 
         // Setting the user repository to the default flat file system
@@ -65,7 +67,6 @@ class TestCase extends OrchestraTestCase
 
         // Assume the pro edition within tests
         $app['config']->set('statamic.editions.pro', true);
-        $app['config']->set('gated.enabled', true);
 
         Statamic::booted(function () {
             Collection::make('pages')->routes('/{slug}')->save();
