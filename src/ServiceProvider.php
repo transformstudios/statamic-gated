@@ -14,6 +14,10 @@ class ServiceProvider extends AddonServiceProvider
         ],
     ];
 
+    protected $routes = [
+        'actions' => __DIR__.'/../routes/actions.php',
+    ];
+
     protected $tags = [
         Gate::class,
     ];
