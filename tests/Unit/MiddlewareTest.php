@@ -23,8 +23,8 @@ class MiddlewareTest extends TestCase
         $query = Arr::query(['roles' => ['role-one', 'role-two']]);
 
         $this->actingAs($user)
-            ->get('/dummy-test-route')
-            ->assertRedirect('http://gated.test/dummy-test-route?'.$query);
+            ->get('/dummy-route')
+            ->assertRedirect('http://gated.test/dummy-route?'.$query);
     }
 
     /** @test */
@@ -49,12 +49,12 @@ class MiddlewareTest extends TestCase
         $query = Arr::query(['roles' => ['role-one', 'role-two']]);
 
         $this->actingAs($user)
-            ->get('/dummy-test-route?foo=bar')
-            ->assertRedirect('http://gated.test/dummy-test-route?foo=bar&'.$query);
+            ->get('/dummy-route?foo=bar')
+            ->assertRedirect('http://gated.test/dummy-route?foo=bar&'.$query);
 
         $this->actingAs($user)
-            ->get('/dummy-test-route?roles[]=one&roles[]=two&foo=bar')
-            ->assertRedirect('http://gated.test/dummy-test-route?foo=bar&'.$query);
+            ->get('/dummy-route?roles[]=one&roles[]=two&foo=bar')
+            ->assertRedirect('http://gated.test/dummy-route?foo=bar&'.$query);
     }
 
     /** @test */

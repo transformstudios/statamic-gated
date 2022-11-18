@@ -16,9 +16,9 @@ class TestCase extends OrchestraTestCase
 
     protected function setUp(): void
     {
-        $this->preventSavingStacheItemsToDisk();
-
         parent::setUp();
+
+        $this->preventSavingStacheItemsToDisk();
     }
 
     public function tearDown(): void
