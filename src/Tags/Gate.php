@@ -14,7 +14,7 @@ class Gate extends Tags
      */
     public function authorized()
     {
-        if ($this->context->raw('gated_by') !== 'roles') {
+        if (! $this->isGatedByRoles()) {
             return true;
         }
 
@@ -39,5 +39,11 @@ class Gate extends Tags
         $html .= $this->formClose();
 
         return $html;
+    }
+
+    private function isGatedByRoles(): bool
+    {
+        return ($this->context->raw('gated_by') === 'roles') ||
+            $this->context->raw('is_gated');
     }
 }
