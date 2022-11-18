@@ -76,6 +76,10 @@ class HandleGate
 
     private function gate(Page $page): ?string
     {
+        if ($page->is_gated) {
+            return 'roles';
+        }
+
         return $page->gated_by?->value();
     }
 }
