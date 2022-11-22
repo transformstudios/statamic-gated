@@ -4,45 +4,45 @@ namespace TransformStudios\Gated\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
+use Statamic\Contracts\Entries\Entry;
 use Statamic\Facades\Entry as EntryFacade;
 use Statamic\Facades\User as UserFacade;
-use Statamic\Structures\Page;
 use Statamic\Support\Arr;
 
 class HandleGate
 {
     public function handle(Request $request, Closure $next)
     {
-        /** @var Page */
-        if (! $page = EntryFacade::findByUri($request->getRequestUri())) {
+        /** @var \Statamic\Entries\Entry */
+        if (! $entry = EntryFacade::findByUri($request->getRequestUri())) {
             return $next($request);
         }
 
-        return match ($this->gate($page)) {
-            'password' => $this->handlePassword($request, $next, $page),
-            'roles' => $this->handleRoles($request, $next, $page),
+        return match ($this->gate($entry)) {
+            'password' => $this->handlePassword($request, $next, $entry),
+            'roles' => $this->handleRoles($request, $next),
             default => $next($request),
         };
 
         return $next($request);
     }
 
-    private function handlePassword(Request $request, Closure $next, Page $page)
+    private function handlePassword(Request $request, Closure $next, Entry $entry)
     {
-        if (session('gated.validated_password') === $page->password) {
+        if (session('gated.validated_password') === $entry->password) {
             return $next($request);
         }
 
-        return abort(redirect()->route(
+        abort(redirect()->route(
             'statamic.gated.password.show',
             [
                 'redirect' => $request->getRequestUri(),
-                'id' => $page->id(),
+                'id' => $entry->id(),
             ]
         ));
     }
 
-    private function handleRoles(Request $request, Closure $next, Page $page)
+    private function handleRoles(Request $request, Closure $next)
     {
         $qsRoles = $request->query('roles');
 
@@ -74,12 +74,12 @@ class HandleGate
         )));
     }
 
-    private function gate(Page $page): ?string
+    private function gate(Entry $entry): ?string
     {
-        if ($page->is_gated) {
+        if ($entry->is_gated) {
             return 'roles';
         }
 
-        return $page->gated_by?->value();
+        return $entry->gated_by?->value();
     }
 }

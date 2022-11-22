@@ -11,6 +11,6 @@ class PasswordController
     {
         Session::put('gated.validated_password', $request->password);
 
-        return redirect()->to($request->redirect);
+        return redirect($request->redirect);
     }
 }
