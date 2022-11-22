@@ -33,13 +33,13 @@ class HandleGate
             return $next($request);
         }
 
-        abort(redirect()->route(
+        return redirect()->route(
             'statamic.gated.password.show',
             [
                 'redirect' => $request->getRequestUri(),
                 'id' => $entry->id(),
             ]
-        ));
+        );
     }
 
     private function handleRoles(Request $request, Closure $next)
