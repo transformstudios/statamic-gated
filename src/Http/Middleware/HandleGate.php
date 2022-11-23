@@ -29,7 +29,7 @@ class HandleGate
 
     private function handlePassword(Request $request, Closure $next, Entry $entry)
     {
-        if (session('gated.validated_password') === $entry->password) {
+        if (session("gated.validated_password.$entry->id") === $entry->password) {
             return $next($request);
         }
 
