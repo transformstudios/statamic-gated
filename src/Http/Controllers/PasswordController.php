@@ -9,8 +9,8 @@ class PasswordController
 {
     public function store(Request $request)
     {
-        Session::put('gated.validated_password', $request->password);
+        Session::put("gated.validated_password.$request->id", $request->password);
 
-        return redirect()->to($request->redirect);
+        return redirect($request->redirect);
     }
 }

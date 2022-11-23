@@ -29,17 +29,17 @@ class HandleGate
 
     private function handlePassword(Request $request, Closure $next, Entry $entry)
     {
-        if (session('gated.validated_password') === $entry->password) {
+        if (session("gated.validated_password.$entry->id") === $entry->password) {
             return $next($request);
         }
 
-        return abort(redirect()->route(
+        return redirect()->route(
             'statamic.gated.password.show',
             [
                 'redirect' => $request->getRequestUri(),
                 'id' => $entry->id(),
             ]
-        ));
+        );
     }
 
     private function handleRoles(Request $request, Closure $next)
